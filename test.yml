@@ -1,0 +1,7 @@
+---
+- name: Create a User
+  hosts: all
+  become: true
+  tasks:
+    - name: Creating a user cloud
+      user: name=cloud
