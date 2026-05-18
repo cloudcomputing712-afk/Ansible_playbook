@@ -1,0 +1,9 @@
+---
+- name: This Playbook is Uninstalling the Git
+  hosts: all
+  become: true
+  tasks:
+    - name: Uninstalling Git
+      yum:
+        name: git*
+        state: absent
