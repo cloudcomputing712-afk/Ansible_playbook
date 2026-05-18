@@ -1,0 +1,9 @@
+---
+- name: This Playbook is Making a Directory
+  hosts: all
+  become: true
+  tasks:
+    - name: Creating a directory called Clouddir
+      file:
+        path: /tmp/Clouddir
+        state: directory
