@@ -1,0 +1,13 @@
+---
+- name: This Playbook is Unistalling and Stopping httpd
+  hosts: all
+  become: true
+  tasks:
+    - name: Stopping httpd service
+      service:
+        name: httpd
+        state: stopped
+    - name: Unstalling httpd package
+      yum:
+        name: httpd*
+        state: absent
