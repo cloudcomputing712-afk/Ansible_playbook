@@ -1,0 +1,35 @@
+--- - name: Deploying website using Ansible hosts: dockerserver
+  become: true
+  tasks:
+    - name: make web directory
+      file:
+        path: /opt/webapp
+        state: directory
+
+    - name: copy index.html
+      copy:
+        src: index.html
+        dest: /opt/webapp/index.html
+
+    - name: copy Dockerfile
+      copy:
+        src: Dockerfile
+        dest: /opt/webapp/Dockerfile
+
+    - name: Stop Container if exists
+      command: docker stop webcont
+      ignore_errors: yes
+
+    - name: Delete Docker Container if exists
+      command: docker rm webcont
+      ignore_errors: yes
+
+    - name: Delete Docker images if exists
+      command: docker rmi mywebsite
+      ignore_errors: yes
+
+    - name: Build Docker image
+      command: docker build -t mywebsite /opt/webapp
+
+    - name: Run Docker container with volume
+      command: docker run -td --name webcont -p 80:80 -v /opt/webapp/index.html:/usr/share/nginx/html/index.html  mywebsite

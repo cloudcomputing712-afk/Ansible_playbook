@@ -1,0 +1,11 @@
+---
+- name: Stop Tomcat Service
+  hosts: webserver
+  become: true
+  vars:
+    version: 11
+  tasks:
+    - name: stopping tomcat service
+      shell: ./shutdown.sh
+      args:
+        chdir: /opt/apache-tomcat-{{version}}.0.22/bin

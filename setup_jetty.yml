@@ -1,0 +1,50 @@
+---
+- name: This Playbook is Setup jetty 
+  hosts: webserver
+  become: true
+  vars:
+    version: 12
+  tasks:
+    - name: Install Java on RedHat
+      yum:
+       name: java
+       state: installed
+      when: ansible_os_family == "RedHat"
+
+    - name: Install Java on Debain
+      apt:
+        name: default-jdk
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Setup_jetty
+      get_url:
+        url: https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/{{version}}.1.9/jetty-home-{{version}}.1.9.tar.gz
+        dest: /opt
+
+    - name: Extract Jetty
+      unarchive:
+        src: /opt/jetty-home-{{version}}.1.9.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: Make directory
+      file:
+        path: /opt/jetty-base
+        state: directory
+
+    - name: Initialiaze jetty-base
+      shell: java -jar /opt/jetty-home-{{version}}.1.9/start.jar --create-startd
+      args:
+        chdir: /opt/jetty-base
+
+    - name: Add HTTP Module
+      shell: java -jar /opt/jetty-home-{{version}}.1.9/start.jar --add-modules=http
+      args:
+        chdir: /opt/jetty-base
+
+    - name: start Jetty
+      shell: nohup java -jar  /opt/jetty-home-{{version}}.1.9/start.jar &
+      args:
+        chdir: /opt/jetty-base
+ 

@@ -1,0 +1,15 @@
+---
+- name: This Playbook is Setup Docker
+  hosts: dockerserver
+  become: true
+  tasks:
+    - name: Installing docker
+      yum:
+        name: docker
+        state: installed
+
+    - name: Starting docker service
+      service:
+        name: docker
+        state: started
+        enabled: true

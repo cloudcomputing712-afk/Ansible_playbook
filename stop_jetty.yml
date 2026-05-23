@@ -1,0 +1,8 @@
+---
+- name: Stop Jetty
+  hosts: webserver
+  become: true
+
+  tasks:
+    - name: Stop Jetty process
+      shell: pkill -f start.jar
